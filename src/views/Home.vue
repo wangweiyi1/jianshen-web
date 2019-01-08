@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <el-container style="height: 500px; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <div class="home-container">
+    <el-container style="height: 100%; border: 1px solid #eee">
+      <el-aside width="200px">
         <el-menu :default-openeds="['1', '3']">
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-message"></i>导航一</template>
@@ -80,22 +80,26 @@
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  data () {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
-    return {
-      tableData: Array(20).fill(item)
+  export default {
+    name: 'HelloWorld',
+    data () {
+      const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      };
+      return {
+        tableData: Array(20).fill(item)
+      }
     }
   }
-}
 </script>
 
 <style scoped>
+  .home-container{
+    height:100%;
+  }
+
   .el-header {
     background-color: #B3C0D1;
     color: #333;
