@@ -1,53 +1,17 @@
 <template>
   <div class="home-container">
-    <el-container style="height: 100%; border: 1px solid #eee">
-      <el-aside width="200px">
-        <el-menu :default-openeds="['1', '3']">
-          <el-submenu index="1">
-            <template slot="title"><i class="el-icon-message"></i>导航一</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="2-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="3-1">选项1</el-menu-item>
-              <el-menu-item index="3-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="3-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="3-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
+    <el-container style="height: 100%;">
+      <el-aside class="aside-container" width="200px">
+        <div class="logo-container">
+          打包健身
+        </div>
+        <el-menu :default-active="menuActive" router background-color="#545c64"
+                 text-color="#fff"
+                 active-text-color="#ffd04b">
+          <el-menu-item index="/order/list">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">订单列表</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -65,14 +29,9 @@
         </el-header>
 
         <el-main>
-          <el-table :data="tableData">
-            <el-table-column prop="date" label="日期" width="140">
-            </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120">
-            </el-table-column>
-            <el-table-column prop="address" label="地址">
-            </el-table-column>
-          </el-table>
+          <transition name="fade" mode="out-in">
+            <router-view/>
+          </transition>
         </el-main>
       </el-container>
     </el-container>
@@ -83,13 +42,8 @@
   export default {
     name: 'HelloWorld',
     data () {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      };
       return {
-        tableData: Array(20).fill(item)
+        menuActive:"/order/list"
       }
     }
   }
@@ -101,12 +55,29 @@
   }
 
   .el-header {
-    background-color: #B3C0D1;
+    background-color: #fff;
     color: #333;
     line-height: 60px;
   }
 
   .el-aside {
     color: #333;
+  }
+
+  .aside-container{
+    background: #545c64;
+    box-shadow: rgba(0, 0, 0, 0.05) 2px 0px 1px 0px;
+  }
+
+  .el-menu{
+    border:0;
+  }
+
+  .logo-container{
+    padding:15px 20px;
+    font-size:18px;
+    color:#fff;
+    background: #2a2e33;
+    /*text-align: center;*/
   }
 </style>
