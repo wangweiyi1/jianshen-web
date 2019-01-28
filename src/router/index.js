@@ -7,6 +7,7 @@ import OrderCreate from '@/views/order/Create'
 
 import GymList from '@/views/gym/List'
 import GymCreate from '@/views/gym/Create'
+import GymDetail from '@/views/gym/Detail'
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ export default new Router({
           path: '/gym/list',
           name: 'gymList',
           component: GymList,
+        },
+        {
+          path: '/gym/detail',
+          name: 'gymDetail',
+          component: GymDetail,
         },
         {
           path: '/gym/create',

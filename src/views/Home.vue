@@ -7,11 +7,14 @@
           打包健身
         </div>
         <el-menu :default-active="menuActive" router background-color="#545c64"
-                 text-color="#fff"
-                 active-text-color="#ffd04b">
+                 text-color="#fff" active-text-color="#ffd04b">
           <el-menu-item index="/gym/list">
             <i class="el-icon-tickets"></i>
-            <span slot="title">健身房列表</span>
+            <span slot="title">会馆列表</span>
+          </el-menu-item>
+          <el-menu-item index="/gym/detail">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">会馆详情</span>
           </el-menu-item>
           <el-menu-item index="/order/list">
             <i class="el-icon-tickets"></i>
@@ -48,7 +51,7 @@
     name: 'HelloWorld',
     data () {
       return {
-        menuActive:"/order/list"
+        menuActive:"/gym/list"
       }
     }
   }

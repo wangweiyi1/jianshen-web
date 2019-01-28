@@ -2,7 +2,8 @@ import axios from 'axios';
 
 let base = '';
 
-base = 'https://apicem.pepsico.com.cn';
+// base = 'https://apicem.pepsico.com.cn';
+base = 'http://10.1.6.214:8081';
 
 //http request 拦截器
 // axios.interceptors.request.use(
@@ -42,5 +43,10 @@ base = 'https://apicem.pepsico.com.cn';
 //   });
 
 export const login = params => axios.post(`${base}/security/login`, params);
-export const getAnjiaDemoDashboard = params => axios.post(`${base}/assertDemo/getAnjiaDemoDashboard`, params);
-export const getAnjiaDemoDashboard1 = params => axios.post(`${base}/assertDemo/getAnjiaDemoDashboard1`, params);
+export const createFitnessRoom = params => axios.post(`${base}/fitnessRoom/createFitnessRoom`, params);
+export const removedFitnessRoomById = params => axios.post(`${base}/fitnessRoom/removedFitnessRoomById`, params);
+export const queryFitnessRoomById = params => axios.post(`${base}/fitnessRoom/queryFitnessRoomById`, params);
+export const creatCards = params => axios.post(`${base}/fitnessRoom/creatCards`, params);
+export const removedCard = params => axios.post(`${base}/fitnessRoom/removedCard`, params);
+export const creatSport = params => axios.post(`${base}/fitnessRoom/creatSport`, params);
+export const removedSport = params => axios.post(`${base}/fitnessRoom/removedSport`, params);
