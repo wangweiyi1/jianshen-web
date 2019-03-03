@@ -1,13 +1,23 @@
 <template>
     <div>
       <el-card>
-        <el-button @click="createOrder" size="small">新建健身房</el-button>
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180">
+        <el-button @click="createOrder" size="mini">新建会馆</el-button>
+        <el-table :data="tableData" style="width: 100%" v-loading="loading">
+          <el-table-column label="会馆名称">
+            <template slot-scope="scope">
+              <el-button type="text" @click="linkDetail(scope.row.id)">{{scope.row.name}}</el-button>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+          <el-table-column prop="type" label="会馆类型">
           </el-table-column>
-          <el-table-column prop="address" label="地址">
+          <el-table-column prop="callNumber" label="联系电话">
+          </el-table-column>
+          <el-table-column prop="location" label="地址">
+          </el-table-column>
+          <el-table-column prop="type" label="操作">
+            <template slot-scope="scope">
+              <el-button @click="removedFitnessRoomById(scope.row.id)" size="mini">删除会馆</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-card>
@@ -15,32 +25,43 @@
 </template>
 
 <script>
+  import {queryFitnessRoomByType,removedFitnessRoomById} from '../../api/api'
   export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        loading:false,
+        tableData: []
       }
     },
     methods:{
       createOrder(){
         this.$router.push({ path: '/gym/create' })
+      },
+      linkDetail(id){
+        this.$router.push({ path: '/gym/detail' , query:{id:id} })
+      },
+      removedFitnessRoomById(id){
+        let para = new FormData();
+        para.append("id",id);
+        removedFitnessRoomById(para).then(res=>{
+          if(res.data.success){
+            this.$message.success(res.data.msg);
+            this.queryFitnessRoomByType();
+          }else{
+            this.$message.error(res.data.msg);
+          }
+        });
+      },
+      queryFitnessRoomByType(){
+        this.loading = true;
+        queryFitnessRoomByType().then(res => {
+          this.loading = false;
+          this.tableData = res.data.data;
+        })
       }
+    },
+    mounted(){
+      this.queryFitnessRoomByType();
     }
   }
 </script>

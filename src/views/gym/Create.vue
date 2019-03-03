@@ -2,6 +2,10 @@
   <div>
     <el-card>
       <el-form ref="form" :model="form" label-width="120px">
+        <el-form-item label="会馆照片">
+          <input ref="image1" type="file" name="file" @change="preview('image1')"/>
+          <img class="preview-img" :src="image.image1_src" v-show="image.image1"/>
+        </el-form-item>
         <el-form-item label="会馆名称">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
@@ -70,6 +74,10 @@
     data(){
       return{
         update:false,
+        image:{
+          image1:false,
+          image1_src:"#",
+        },
         form:{
           name:"",
           grade:5,
@@ -89,6 +97,21 @@
       }
     },
     methods:{
+      preview(){
+        console.log(this.$refs.image1.value);
+        let filePath = this.$refs.image1.value; //获取到input的value，里面是文件的路径
+        let fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
+        let src = window.URL.createObjectURL(this.$refs.image1.files[0]); //转成可以在本地预览的格式
+
+        // 检查是否是图片
+        if(!fileFormat.match(/.png|.jpg|.jpeg/)) {
+          error_prompt_alert('上传错误,文件格式必须为：png/jpg/jpeg');
+          return;
+        }else{
+          this.image.image1 = true;
+          this.image.image1_src = src;
+        }
+      },
       submit(){
         let para = new FormData();
         para.append("name",this.form.name);
@@ -97,7 +120,7 @@
         para.append("lng",this.form.lng);
         para.append("lat",this.form.lat);
         para.append("type",this.form.type);
-        para.append("businessHours","时间");
+        para.append("businessHours",util.formatDate(this.form.businessHours[0],"hh:mm") + " - " + util.formatDate(this.form.businessHours[1],"hh:mm"));
         para.append("location",this.form.location);
         para.append("feature",this.form.feature);
         para.append("callNumber",this.form.callNumber);
@@ -105,6 +128,7 @@
         para.append("isFlagBusiness",this.form.isFlagBusiness);
         para.append("shutdownReason",this.form.shutdownReason);
         para.append("popularity",this.form.popularity);
+        para.append("profilePhoto",this.$refs.image1.files[0]);
         createFitnessRoom(para).then(res => {
           if(res.data.success){
             this.$message.success(res.data.msg);
@@ -121,5 +145,9 @@
   }
 </script>
 
-<style>
+<style scoped>
+  .preview-img{
+    width:100px;
+    height:100px;
+  }
 </style>

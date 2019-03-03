@@ -8,15 +8,15 @@
         </div>
         <el-menu :default-active="menuActive" router background-color="#545c64"
                  text-color="#fff" active-text-color="#ffd04b">
-          <el-menu-item index="/gym/list">
+          <el-menu-item index="/gym/list" v-show="authority == 'supermanager'">
             <i class="el-icon-tickets"></i>
             <span slot="title">会馆列表</span>
           </el-menu-item>
-          <el-menu-item index="/gym/detail">
+          <el-menu-item index="/gym/detail" v-show="authority == 'manager'">
             <i class="el-icon-tickets"></i>
             <span slot="title">会馆详情</span>
           </el-menu-item>
-          <el-menu-item index="/order/list">
+          <el-menu-item index="/order/list" v-show="authority == 'manager'">
             <i class="el-icon-tickets"></i>
             <span slot="title">订单列表</span>
           </el-menu-item>
@@ -26,14 +26,12 @@
       <el-container>
         <el-header style="text-align: right; font-size: 12px">
           <el-dropdown>
+            <span style="cursor: pointer;">{{user.userName}}</span>
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
+              <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>王小虎</span>
         </el-header>
 
         <el-main>
@@ -51,8 +49,33 @@
     name: 'HelloWorld',
     data () {
       return {
-        menuActive:"/gym/list"
+        menuActive:"/gym/list",
+        user:{},
+        authority:"",
       }
+    },
+    methods:{
+      logout(){
+        this.$confirm('是否确认退出登录', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          localStorage.removeItem('user');
+          this.$router.push({ path: '/login' });
+        }).catch(() => {
+
+        });
+      }
+    },
+    mounted(){
+      this.user = JSON.parse(localStorage.getItem('user'));
+      if(this.user.authority == 'supermanager'){
+        this.menuActive = '/gym/list';
+      }else{
+        this.menuActive = '/gym/detail';
+      }
+      this.authority = this.user.authority;
     }
   }
 </script>

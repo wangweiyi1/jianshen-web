@@ -7,7 +7,16 @@ import App from './App'
 import router from './router'
 
 Vue.use(ElementUI);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+router.beforeEach((to, from, next) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user == null && to.path != '/login') {
+    next({ path: '/login' });
+  } else {
+    next();
+  }
+});
 
 /* eslint-disable no-new */
 new Vue({

@@ -45,25 +45,25 @@
         para.append('account', this.form.account);
         para.append('password', this.form.password);
         login(para).then(data => {
-          console.log(data);
-          return;
           let Data = data.data;
           let status = Data.status;
           if (status) {
             let loginTime = Date.parse(new Date());
             let loginParams = {
               userId: Data.userId,
-              authorities: Data.authorities,
-              audienceSource: Data.audienceSource,
-              advertiserId: Data.advertiserId,
               userName: Data.userName,
-              userAccount: Data.userAccount,
               token: Data.token,
-              loginTime: loginTime,
-              permission: Data.permission,
+              authority:Data.authority
             };
+            if(Data.authority == 'manager'){
+              loginParams.roomId = Data.roomId;
+            }
             localStorage.setItem('user', JSON.stringify(loginParams));
-            this.$router.push({path: "/gym/list"});
+            if(Data.authority == 'supermanager'){
+              this.$router.push({path: "/gym/list"});
+            }else{
+              this.$router.push({path: "/gym/detail"});
+            }
           } else {
             this.$message.error(Data.retMsg);
           }
