@@ -1,7 +1,12 @@
 <template>
   <div>
     <el-card>
-      <el-row>
+      <el-row class="detail-container" v-loading="loading.detail">
+        <div class="switch-container">
+          是否公开&nbsp;
+          <el-switch v-model="information.active" active-color="#13ce66" inactive-color="#ff4949" @change="updateFitnessRoomActive">
+          </el-switch>
+        </div>
         <el-col :span="24" class="gym-attribute">
           <img v-if="information.profilePhoto && information.profilePhoto.length > 0" style="width:200px;height:200px;"
                :src="'http://www.dabaojianshen.com:9001/' + information.profilePhoto[0].visitPath">
@@ -168,7 +173,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="cardTitle" :visible.sync="dialog.card" width="40%">
+    <el-dialog :title="cardTitle" :visible.sync="dialog.card" width="40%" v-loading="loading.card">
       <el-form ref="cardForm" :model="cardForm" label-width="120px">
         <el-form-item label="卡片名称">
           <el-input v-model="cardForm.name"></el-input>
@@ -191,7 +196,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="sportTitle" :visible.sync="dialog.sport" width="40%">
+    <el-dialog :title="sportTitle" :visible.sync="dialog.sport" width="40%" v-loading="loading.sport">
       <el-form ref="sportForm" :model="sportForm" label-width="120px">
         <el-form-item label="项目名称">
           <el-input v-model="sportForm.name"></el-input>
@@ -218,24 +223,11 @@
 
     <el-dialog title="修改轮播图" :visible.sync="dialog.detailPhotos" width="800">
       <el-row :gutter="20">
-        <!--<template v-for="(photo,index) in detailPhotos">-->
-          <!--<el-col :span="6" style="text-align: center;position: relative;">-->
-            <!--<input :ref="'detailPhoto'+index" type="file" name="file" style="position: absolute;left:0;top:0;opacity: 0;"-->
-                   <!--@change="uploadDetailsPhoto(index)"/>-->
-            <!--<img :src="'http://www.dabaojianshen.com:9001/' + photo.visitPath" class="detail-photo"/><br>-->
-            <!--<el-button @click="removedPhoto(photo.id)" size="mini">删除图{{index + 1}}</el-button>-->
-          <!--</el-col>-->
-        <!--</template>-->
         <el-upload
           action="https://www.dabaojianshen.com/fitnessRoom/uploadDetailsPhoto" name="detailsPhoto" :file-list="fileList"
           list-type="picture-card" :data="fileData" :before-remove="removedPhoto">
           <i class="el-icon-plus"></i>
         </el-upload>
-        <!--<el-col :span="6">-->
-          <!--<div class="avatar-uploader" @click="addDetailPhoto">-->
-            <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
-          <!--</div>-->
-        <!--</el-col>-->
       </el-row>
 
       <span slot="footer" class="dialog-footer">
@@ -244,7 +236,7 @@
         </span>
     </el-dialog>
 
-    <el-dialog :title="coachTitle" :visible.sync="dialog.coath" width="50%">
+    <el-dialog :title="coachTitle" :visible.sync="dialog.coath" width="800">
       <el-form :model="coathForm" label-width="160px">
 
         <el-form-item label="" v-if="coathForm.path != ''">
@@ -322,7 +314,7 @@
 
       <span slot="footer" class="dialog-footer">
           <el-button @click="dialog.coath = false">取 消</el-button>
-          <el-button type="primary" @click="createCoach">确 定</el-button>
+          <el-button type="primary" @click="createCoach" :loading="loading.coathDialog">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -359,7 +351,8 @@
     updateFitnessRoom,
     updateSport,
     updateCards,
-    deleteCoach
+    deleteCoach,
+    updateFitnessRoomActive
   } from '../../api/api'
   import util from '../../util/index'
 
@@ -379,6 +372,9 @@
           detail: false,
           coath: false,
           coachTable: false,
+          card:false,
+          sport:false,
+          coathDialog:false,
         },
         gymForm: {
           name: "",
@@ -431,7 +427,9 @@
         cardTable: [],
         sportTable: [],
         coachTable: [],
-        information: {},
+        information: {
+          active:false,
+        },
         detailPhotos: [],
         scheduleTable: [],
         fileList:[],
@@ -442,6 +440,23 @@
       }
     },
     methods: {
+      updateFitnessRoomActive(){
+        let para = new FormData();
+        para.append("fitnessId", this.fitnessId);
+        para.append("active", this.information.active);
+        this.loading.detail = true;
+        updateFitnessRoomActive(para).then(res=>{
+          this.loading.detail = false;
+          this.getDetail();
+          this.$message.success('修改状态成功');
+          // if (res.data.success) {
+          //   this.getDetail();
+          //   this.$message.success('修改状态成功');
+          // } else {
+          //   this.$message.error('修改失败');
+          // }
+        })
+      },
       coachDialog() {
         this.dialog.coath = true;
         this.coachTitle = "新建教练";
@@ -497,7 +512,9 @@
           let para = new FormData();
           para.append("roomId", this.fitnessId);
           para.append("id", id);
+          this.loading.coath = true;
           deleteCoach(para).then(res => {
+            this.loading.coath = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.getCoathList();
@@ -567,8 +584,10 @@
         para.append("description", this.cardForm.description);
         para.append("price", this.cardForm.price);
         para.append("unit", this.cardForm.unit);
+        this.loading.card = true;
         if (this.cardTitle == "新建卡片") {
           creatCards(para).then(res => {
+            this.loading.card = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.card = false;
@@ -580,6 +599,7 @@
         } else {
           para.append("cardId", this.cardForm.id);
           updateCards(para).then(res => {
+            this.loading.card = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.card = false;
@@ -599,7 +619,9 @@
           let para = new FormData();
           para.append("fitnessId", this.fitnessId);
           para.append("cardId", id);
+          this.loading.detail = true;
           removedCard(para).then(res => {
+            this.loading.detail = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.getDetail();
@@ -620,7 +642,9 @@
           let para = new FormData();
           para.append("fitnessId", this.fitnessId);
           para.append("sportId", id);
+          this.loading.detail = true;
           removedSport(para).then(res => {
+            this.loading.fals = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.getDetail();
@@ -649,7 +673,6 @@
       addDetailPhoto() {
         this.detailPhotos.push({});
         this.$nextTick(() => {
-          console.log(this.$refs['detailPhoto' + (this.detailPhotos.length - 1)][0]);
           this.$refs['detailPhoto' + (this.detailPhotos.length - 1)][0].click();
         });
       },
@@ -692,8 +715,10 @@
         para.append("fitnessId", this.fitnessId);
         para.append("name", this.sportForm.name);
         para.append("description", this.sportForm.description);
+        this.loading.sport = true;
         if (this.sportTitle == "新建项目") {
           creatSport(para).then(res => {
+            this.loading.sport = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.sport = false;
@@ -705,6 +730,7 @@
         } else {
           para.append("sportId", this.sportForm.id);
           updateSport(para).then(res => {
+            this.loading.sport = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.sport = false;
@@ -716,6 +742,10 @@
         }
       },
       createCoach() {
+        if(typeof this.$refs.coathPhoto.files[0] == "undefined"){
+          this.$message.error("请上传教练头像");
+          return;
+        }
         let para = new FormData();
         para.append("roomId", this.fitnessId);
         para.append("name", this.coathForm.name);
@@ -727,6 +757,7 @@
         para.append("level", this.coathForm.level);
         para.append("amount", this.coathForm.amount);
         para.append("goodness", this.coathForm.goodness);
+        this.loading.coathDialog = true;
         if(this.coachTitle == '新建教练'){
           para.append("file", this.$refs.coathPhoto.files[0]);
           for (let i = 0; i < this.coathForm.schedules.length; i++) {
@@ -734,6 +765,7 @@
             para.append("scheduleVoList[" + i + "].endTime", this.coathForm.schedules[i].endTime + ":00");
           }
           createCoach(para).then(res => {
+            this.loading.coathDialog = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.coath = false;
@@ -743,11 +775,12 @@
             }
           })
         }else{
-          if(this.$refs.coathPhoto.files[0] != "undefined"){
+          if(typeof this.$refs.coathPhoto.files[0] != "undefined"){
             para.append("file", this.$refs.coathPhoto.files[0]);
           }
           para.append("id", this.coathForm.id);
           updateCoach(para).then(res => {
+            this.loading.coathDialog = false;
             if (res.data.success) {
               this.$message.success(res.data.msg);
               this.dialog.coath = false;
@@ -761,7 +794,9 @@
       getDetail() {
         let para = new FormData();
         para.append("id", this.fitnessId);
+        this.loading.detail = true;
         queryFitnessRoomById(para).then(res => {
+          this.loading.detail = false;
           let data = res.data.data;
           this.information = data;
           this.cardTable = data.cards;
@@ -882,5 +917,17 @@
   .detail-photo {
     width: 150px;
     height: 150px;
+  }
+
+  .detail-container{
+    position: relative;
+  }
+
+  .switch-container{
+    position: absolute;
+    right:50px;
+    top:30px;
+    display: flex;
+    justify-items: center;
   }
 </style>

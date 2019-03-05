@@ -6,7 +6,7 @@ let base = '';
 base = 'https://www.dabaojianshen.com';
 
 // base = 'http://10.1.6.218:8081';
-// base = 'http://10.1.6.217:8088';
+// base = 'http://10.1.6.70:8088';
 
 //http request 拦截器
 axios.interceptors.request.use(
@@ -60,6 +60,8 @@ export const removedCard = params => axios.post(`${base}/fitnessRoom/removedCard
 export const creatSport = params => axios.post(`${base}/fitnessRoom/creatSport`, params);
 export const updateSport = params => axios.post(`${base}/fitnessRoom/updateSport`, params);
 export const removedSport = params => axios.post(`${base}/fitnessRoom/removedSport`, params);
+export const listAccount = params => axios.post(`${base}/fitnessRoom/listAccount`, params);
+export const updateFitnessRoomActive = params => axios.post(`${base}/fitnessRoom/updateFitnessRoomActive`, params);
 export const getOrderListByFitnessId = params => axios.post(`${base}/order/getOrderListByFitnessId`, params);
 export const updateOrderByFitnessId = params => axios.post(`${base}/order/updateOrderByFitnessId`, params);
 
@@ -69,3 +71,5 @@ export const createCoach = params => axios.post(`${base}/back/coach/create/`, pa
 export const getSchedule = params => axios.post(`${base}/back/schedule/list/`, params);
 export const updateCoach = params => axios.post(`${base}/back/coach/update/`, params);
 export const deleteCoach = params => axios.post(`${base}/back/coach/delete/`, params);
+
+export const createUser = params => axios.post(`${base}/user/create`, params);
