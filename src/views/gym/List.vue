@@ -8,7 +8,7 @@
               <el-button type="text" @click="linkDetail(scope.row.id)">{{scope.row.name}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="type" label="会馆类型">
+          <el-table-column prop="typeName" label="会馆类型">
           </el-table-column>
           <el-table-column prop="callNumber" label="联系电话">
           </el-table-column>

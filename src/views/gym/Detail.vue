@@ -216,21 +216,26 @@
         </span>
     </el-dialog>
 
-    <el-dialog title="修改轮播图" :visible.sync="dialog.detailPhotos" width="40%">
+    <el-dialog title="修改轮播图" :visible.sync="dialog.detailPhotos" width="800">
       <el-row :gutter="20">
-        <template v-for="(photo,index) in detailPhotos">
-          <el-col :span="6" style="text-align: center;">
-            <input :ref="'detailPhoto'+index" type="file" name="file" style="display: none;"
-                   @change="uploadDetailsPhoto(index)"/>
-            <img :src="'http://www.dabaojianshen.com:9001/' + photo.visitPath" class="detail-photo"/><br>
-            <el-button @click="removedPhoto(photo.id)" size="mini">删除图{{index + 1}}</el-button>
-          </el-col>
-        </template>
-        <el-col :span="6">
-          <div class="avatar-uploader" @click="addDetailPhoto">
-            <i class="el-icon-plus avatar-uploader-icon"></i>
-          </div>
-        </el-col>
+        <!--<template v-for="(photo,index) in detailPhotos">-->
+          <!--<el-col :span="6" style="text-align: center;position: relative;">-->
+            <!--<input :ref="'detailPhoto'+index" type="file" name="file" style="position: absolute;left:0;top:0;opacity: 0;"-->
+                   <!--@change="uploadDetailsPhoto(index)"/>-->
+            <!--<img :src="'http://www.dabaojianshen.com:9001/' + photo.visitPath" class="detail-photo"/><br>-->
+            <!--<el-button @click="removedPhoto(photo.id)" size="mini">删除图{{index + 1}}</el-button>-->
+          <!--</el-col>-->
+        <!--</template>-->
+        <el-upload
+          action="https://www.dabaojianshen.com/fitnessRoom/uploadDetailsPhoto" name="detailsPhoto" :file-list="fileList"
+          list-type="picture-card" :data="fileData" :before-remove="removedPhoto">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <!--<el-col :span="6">-->
+          <!--<div class="avatar-uploader" @click="addDetailPhoto">-->
+            <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
+          <!--</div>-->
+        <!--</el-col>-->
       </el-row>
 
       <span slot="footer" class="dialog-footer">
@@ -429,7 +434,11 @@
         information: {},
         detailPhotos: [],
         scheduleTable: [],
+        fileList:[],
         fitnessId: 0,
+        fileData:{
+          id:0
+        }
       }
     },
     methods: {
@@ -593,6 +602,7 @@
           removedCard(para).then(res => {
             if (res.data.success) {
               this.$message.success(res.data.msg);
+              this.getDetail();
             } else {
               this.$message.error(res.data.msg);
             }
@@ -613,6 +623,7 @@
           removedSport(para).then(res => {
             if (res.data.success) {
               this.$message.success(res.data.msg);
+              this.getDetail();
             } else {
               this.$message.error(res.data.msg);
             }
@@ -638,6 +649,7 @@
       addDetailPhoto() {
         this.detailPhotos.push({});
         this.$nextTick(() => {
+          console.log(this.$refs['detailPhoto' + (this.detailPhotos.length - 1)][0]);
           this.$refs['detailPhoto' + (this.detailPhotos.length - 1)][0].click();
         });
       },
@@ -654,13 +666,13 @@
           }
         });
       },
-      removedPhoto(id) {
+      removedPhoto(file) {
         let para = new FormData();
-        para.append("id", id);
+        para.append("id", file.id);
         removedPhoto(para).then(res => {
           if (res.data.success) {
             this.$message.success(res.data.msg);
-            this.getDetail();
+            // this.getDetail();
           } else {
             this.$message.error(res.data.msg);
           }
@@ -755,6 +767,12 @@
           this.cardTable = data.cards;
           this.sportTable = data.sports;
           this.detailPhotos = res.data.data.detailsPhotos;
+          console.log(res.data.data.detailsPhotos);
+          for(let i=0;i<res.data.data.detailsPhotos.length;i++){
+            res.data.data.detailsPhotos[i].url = 'http://www.dabaojianshen.com:9001/' + res.data.data.detailsPhotos[i].visitPath
+          }
+          this.fileList = res.data.data.detailsPhotos;
+          // fileList
           this.gymForm = {
             name: data.name,
             grade: data.grade,
@@ -818,6 +836,9 @@
       } else {
         this.fitnessId = user.roomId;
       }
+      this.fileData = {
+        id:this.fitnessId
+      };
       this.getDetail();
       this.getCoathList();
     }

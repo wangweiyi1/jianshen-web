@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card v-loading="loading">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item label="会馆照片">
           <input ref="image1" type="file" name="file" @change="preview('image1')"/>
@@ -73,6 +73,7 @@
     name: "",
     data(){
       return{
+        loading:false,
         update:false,
         image:{
           image1:false,
@@ -98,7 +99,6 @@
     },
     methods:{
       preview(){
-        console.log(this.$refs.image1.value);
         let filePath = this.$refs.image1.value; //获取到input的value，里面是文件的路径
         let fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
         let src = window.URL.createObjectURL(this.$refs.image1.files[0]); //转成可以在本地预览的格式
@@ -129,7 +129,9 @@
         para.append("shutdownReason",this.form.shutdownReason);
         para.append("popularity",this.form.popularity);
         para.append("profilePhoto",this.$refs.image1.files[0]);
+        this.loading = true;
         createFitnessRoom(para).then(res => {
+          this.loading = false;
           if(res.data.success){
             this.$message.success(res.data.msg);
             this.$router.push({path: '/gym/list',});

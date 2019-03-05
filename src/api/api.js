@@ -3,10 +3,10 @@ import axios from 'axios';
 let base = '';
 
 //线上地址
-// base = 'http://39.104.95.22:8081';
+base = 'https://www.dabaojianshen.com';
 
 // base = 'http://10.1.6.218:8081';
-base = 'http://10.1.6.217:8088';
+// base = 'http://10.1.6.217:8088';
 
 //http request 拦截器
 axios.interceptors.request.use(
