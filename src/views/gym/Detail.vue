@@ -236,7 +236,7 @@
         </span>
     </el-dialog>
 
-    <el-dialog :title="coachTitle" :visible.sync="dialog.coath" width="800">
+    <el-dialog :title="coachTitle" :visible.sync="dialog.coath" width="800px">
       <el-form :model="coathForm" label-width="160px">
 
         <el-form-item label="" v-if="coathForm.path != ''">
@@ -744,6 +744,42 @@
       createCoach() {
         if(typeof this.$refs.coathPhoto.files[0] == "undefined"){
           this.$message.error("请上传教练头像");
+          return;
+        }
+        if(this.coathForm.name == ""){
+          this.$message.error("请填写教练名称");
+          return;
+        }
+        if(this.coathForm.introduction == ""){
+          this.$message.error("请填写教练简介");
+          return;
+        }
+        let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+        if(this.coathForm.email == ""){
+          this.$message.error("请填写邮箱");
+          return;
+        }else if(!reg.test(this.coathForm.email)){
+          this.$message.error("请填写正确的邮箱格式");
+          return;
+        }
+        if(this.coathForm.tel == ""){
+          this.$message.error("请填写联系电话");
+          return;
+        }
+        if(this.coathForm.age == ""){
+          this.$message.error("请填写年龄");
+          return;
+        }
+        if(this.coathForm.level == ""){
+          this.$message.error("请填写评级");
+          return;
+        }
+        if(this.coathForm.amount == ""){
+          this.$message.error("请填写预约价格");
+          return;
+        }
+        if(this.coathForm.goodness == ""){
+          this.$message.error("请填写擅长项目");
           return;
         }
         let para = new FormData();
