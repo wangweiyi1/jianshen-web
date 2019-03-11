@@ -241,7 +241,7 @@
 
         <el-form-item label="" v-if="coathForm.path != ''">
           <img style="width:100px;height:100px;"
-               :src="'http://www.dabaojianshen.com:9001/' + coathForm.path">
+               :src="'http://10.1.6.38:8088/' + coathForm.path">
         </el-form-item>
         <el-form-item label="照片">
           <input ref="coathPhoto" type="file" name="file"/>
@@ -743,10 +743,6 @@
         }
       },
       createCoach() {
-        if(typeof this.$refs.coathPhoto.files[0] == "undefined"){
-          this.$message.error("请上传教练头像");
-          return;
-        }
         if(this.coathForm.name == ""){
           this.$message.error("请填写教练名称");
           return;
@@ -796,6 +792,10 @@
         para.append("goodness", this.coathForm.goodness);
         this.loading.coathDialog = true;
         if(this.coachTitle == '新建教练'){
+          if(typeof this.$refs.coathPhoto.files[0] == "undefined"){
+            this.$message.error("请上传教练头像");
+            return;
+          }
           para.append("file", this.$refs.coathPhoto.files[0]);
           for (let i = 0; i < this.coathForm.schedules.length; i++) {
             para.append("scheduleVoList[" + i + "].beginTime", this.coathForm.schedules[i].beginTime + ":00");
