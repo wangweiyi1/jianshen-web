@@ -169,7 +169,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialog.updateGym = false">取 消</el-button>
-        <el-button type="primary" @click="updateGym">确 定</el-button>
+        <el-button type="primary" @click="updateGym" :loading="loading.gymDialog">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -375,6 +375,7 @@
           card:false,
           sport:false,
           coathDialog:false,
+          gymDialog:false,
         },
         gymForm: {
           name: "",
@@ -854,7 +855,7 @@
             businessHours: [new Date(2016, 9, 10, data.businessHours.split("-")[0].split(":")[0], data.businessHours.split("-")[0].split(":")[1]),
               new Date(2016, 9, 10, data.businessHours.split("-")[1].split(":")[0], data.businessHours.split("-")[0].split(":")[1])],
             location: data.location,
-            feature: data.location,
+            feature: data.feature,
             openingDate: new Date(data.openingDate),
             isFlagBusiness: data.isFlagBusiness,
             shutdownReason: data.shutdownReason,
@@ -880,7 +881,9 @@
         para.append("isFlagBusiness", this.gymForm.isFlagBusiness);
         para.append("shutdownReason", this.gymForm.shutdownReason);
         para.append("popularity", this.gymForm.popularity);
+        this.loading.gymDialog = true;
         updateFitnessRoom(para).then(res => {
+          this.loading.gymDialog = false;
           if (res.data.success) {
             this.$message.success(res.data.msg);
             this.getDetail();

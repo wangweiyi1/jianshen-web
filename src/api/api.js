@@ -6,7 +6,7 @@ let base = '';
 base = 'https://www.dabaojianshen.com';
 
 // base = 'http://10.1.6.218:8081';
-// base = 'http://10.1.6.70:8088';
+base = 'http://10.1.6.38:8088';
 
 //http request 拦截器
 axios.interceptors.request.use(
