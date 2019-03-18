@@ -7,7 +7,7 @@
         </el-form-item>
         <el-form-item prop="password">
           <el-input type="password" v-model="form.password" auto-complete="off" placeholder="密码" @keyup.enter.native="loginRequest"></el-input>
-          <el-button type="text" style="float: right;color:rgb(32, 160, 255)" @click.native.prevent="forgetPwd">忘记密码</el-button>
+          <!--<el-button type="text" style="float: right;color:rgb(32, 160, 255)" @click.native.prevent="forgetPwd">忘记密码</el-button>-->
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="width:100%;" @click.native.prevent="loginRequest">登&nbsp;&nbsp;&nbsp;录</el-button>

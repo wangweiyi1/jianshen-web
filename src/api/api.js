@@ -6,7 +6,7 @@ let base = '';
 base = 'https://www.dabaojianshen.com';
 
 // base = 'http://10.1.6.218:8081';
-base = 'http://10.1.6.38:8088';
+// base = 'http://114.253.76.152:8081';
 
 //http request 拦截器
 axios.interceptors.request.use(
@@ -64,6 +64,7 @@ export const listAccount = params => axios.post(`${base}/fitnessRoom/listAccount
 export const updateFitnessRoomActive = params => axios.post(`${base}/fitnessRoom/updateFitnessRoomActive`, params);
 export const getOrderListByFitnessId = params => axios.post(`${base}/order/getOrderListByFitnessId`, params);
 export const updateOrderByFitnessId = params => axios.post(`${base}/order/updateOrderByFitnessId`, params);
+export const updateCardValid = params => axios.post(`${base}/order/updateCardValid`, params);
 
 export const queryCoachList = params => axios.post(`${base}/front/list/`, params);
 export const listCondition = params => axios.post(`${base}/back/coach/listCondition/`, params);

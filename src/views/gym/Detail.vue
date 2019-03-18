@@ -241,7 +241,7 @@
 
         <el-form-item label="" v-if="coathForm.path != ''">
           <img style="width:100px;height:100px;"
-               :src="'http://10.1.6.38:8088/' + coathForm.path">
+               :src="'http://www.dabaojianshen.com:9001/' + coathForm.path">
         </el-form-item>
         <el-form-item label="照片">
           <input ref="coathPhoto" type="file" name="file"/>
