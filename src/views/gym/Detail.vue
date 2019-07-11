@@ -839,7 +839,6 @@
           this.cardTable = data.cards;
           this.sportTable = data.sports;
           this.detailPhotos = res.data.data.detailsPhotos;
-          console.log(res.data.data.detailsPhotos);
           for(let i=0;i<res.data.data.detailsPhotos.length;i++){
             res.data.data.detailsPhotos[i].url = 'http://www.dabaojianshen.com:9001/' + res.data.data.detailsPhotos[i].visitPath
           }

@@ -9,6 +9,8 @@ import GymList from '@/views/gym/List'
 import GymCreate from '@/views/gym/Create'
 import GymDetail from '@/views/gym/Detail'
 
+import CoachList from '@/views/coach/List'
+
 Vue.use(Router);
 
 export default new Router({
@@ -23,6 +25,11 @@ export default new Router({
       name: 'Home',
       component: Home,
       children:[
+        {
+          path: '/coach/list',
+          name: 'coachList',
+          component: CoachList,
+        },
         {
           path: '/order/list',
           name: 'orderList',

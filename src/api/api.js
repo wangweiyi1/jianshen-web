@@ -3,10 +3,10 @@ import axios from 'axios';
 let base = '';
 
 //线上地址
-base = 'https://www.dabaojianshen.com';
+// base = 'https://www.dabaojianshen.com';
 
 // base = 'http://10.1.6.218:8081';
-// base = 'http://114.253.76.152:8081';
+base = 'http://39.106.9.250:8081';
 
 //http request 拦截器
 axios.interceptors.request.use(
@@ -45,7 +45,7 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data);
   });
 
-export const login = params => axios.post(`${base}/security/login`, params);
+export const login = params => axios.post(`${base}/external/security/login`, params);
 export const createFitnessRoom = params => axios.post(`${base}/fitnessRoom/createFitnessRoom`, params);
 export const updateFitnessRoom = params => axios.post(`${base}/fitnessRoom/updateFitnessRoom`, params);
 export const queryFitnessRoomByType = params => axios.post(`${base}/fitnessRoom/queryFitnessRoomByType`, params);
@@ -74,3 +74,5 @@ export const updateCoach = params => axios.post(`${base}/back/coach/update/`, pa
 export const deleteCoach = params => axios.post(`${base}/back/coach/delete/`, params);
 
 export const createUser = params => axios.post(`${base}/user/create`, params);
+
+export const review = params => axios.post(`${base}/back/coach/review/`, params);

@@ -12,6 +12,10 @@
             <i class="el-icon-tickets"></i>
             <span slot="title">会馆列表</span>
           </el-menu-item>
+          <el-menu-item index="/coach/list" v-show="authority == 'supermanager'">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">个人教练列表</span>
+          </el-menu-item>
           <el-menu-item index="/gym/detail" v-show="authority == 'manager'">
             <i class="el-icon-tickets"></i>
             <span slot="title">会馆详情</span>
